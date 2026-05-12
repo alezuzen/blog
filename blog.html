@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unfiltered — Ale's Op-Eds</title>
+  <style>
+    :root {
+      --bg: #f8f7f4;
+      --bg-card: #ffffff;
+      --text: #1a1a1a;
+      --text-muted: #6b6b6b;
+      --accent: #c0392b;
+      --accent-soft: #fdf0ef;
+      --border: #e5e2dc;
+      --tag-bg: #f0ece6;
+      --serif: 'Georgia', 'Times New Roman', serif;
+      --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      line-height: 1.6;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── HEADER ── */
+    header {
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-card);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .logo {
+      font-family: var(--serif);
+      font-size: 1.5rem;
+      font-weight: normal;
+      letter-spacing: -0.02em;
+    }
+
+    .logo span { color: var(--accent); }
+
+    nav { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    nav button {
+      background: none;
+      border: 1px solid transparent;
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-family: var(--sans);
+      transition: all 0.15s;
+    }
+
+    nav button:hover, nav button.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 24px 32px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent);
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      font-weight: normal;
+      line-height: 1.15;
+      max-width: 720px;
+      margin-bottom: 18px;
+    }
+
+    .hero-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .hero-excerpt {
+      font-family: var(--serif);
+      font-size: 1.15rem;
+      color: var(--text-muted);
+      max-width: 660px;
+      line-height: 1.7;
+    }
+
+    .tag {
+      display: inline-block;
+      background: var(--tag-bg);
+      color: var(--text-muted);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 3px;
+    }
+
+    .tag.life     { background: #edf7ed; color: #2e7d32; }
+    .tag.tech     { background: #e8f4fd; color: #1565c0; }
+    .tag.travel   { background: #fff3e0; color: #e65100; }
+    .tag.parenting{ background: #fce4ec; color: #880e4f; }
+    .tag.culture  { background: #f3e5f5; color: #6a1b9a; }
+    .tag.ideas    { background: #e0f2f1; color: #00695c; }
+
+    /* ── LAYOUT ── */
+    .layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 24px;
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 48px;
+    }
+
+    @media (max-width: 768px) {
+      .layout { grid-template-columns: 1fr; }
+      nav { display: none; }
+    }
+
+    /* ── POSTS ── */
+    .posts { display: flex; flex-direction: column; gap: 0; }
+
+    .post {
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 24px;
+      align-items: start;
+      cursor: pointer;
+    }
+
+    .post:hover .post-title { color: var(--accent); }
+    .post:last-child { border-bottom: none; }
+
+    .post-meta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .post-title {
+      font-family: var(--serif);
+      font-size: 1.35rem;
+      font-weight: normal;
+      line-height: 1.3;
+      margin-bottom: 8px;
+      transition: color 0.15s;
+    }
+
+    .post-excerpt {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      line-height: 1.65;
+      margin-bottom: 12px;
+    }
+
+    .post-footer {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .read-more {
+      font-size: 0.8rem;
+      color: var(--accent);
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .post-thumb {
+      width: 120px;
+      height: 90px;
+      border-radius: 6px;
+      object-fit: cover;
+      background: var(--border);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar { display: flex; flex-direction: column; gap: 32px; }
+
+    .sidebar-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 24px;
+    }
+
+    .sidebar-card h3 {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      font-weight: 700;
+      margin-bottom: 16px;
+    }
+
+    .about-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #e74c3c);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 1.4rem;
+      margin-bottom: 12px;
+    }
+
+    .about-name {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    .about-bio {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .topics-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+    .topic-chip {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      transition: all 0.15s;
+    }
+
+    .topic-chip:hover { border-color: var(--accent); color: var(--accent); }
+
+    .newsletter-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: var(--sans);
+      font-size: 0.85rem;
+      background: var(--bg);
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+
+    .newsletter-input:focus { outline: 2px solid var(--accent); border-color: transparent; }
+
+    .btn {
+      width: 100%;
+      padding: 10px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--sans);
+      transition: opacity 0.15s;
+    }
+
+    .btn:hover { opacity: 0.88; }
+
+    .featured-list { display: flex; flex-direction: column; gap: 14px; }
+
+    .featured-item {
+      display: flex;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .featured-item:hover .featured-title { color: var(--accent); }
+
+    .featured-num {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--border);
+      line-height: 1;
+      flex-shrink: 0;
+      width: 28px;
+    }
+
+    .featured-title {
+      font-size: 0.88rem;
+      line-height: 1.4;
+      font-family: var(--serif);
+      transition: color 0.15s;
+    }
+
+    .featured-meta { font-size: 0.75rem; color: var(--text-muted); margin-top: 3px; }
+
+    /* ── ARTICLE MODAL ── */
+    .overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 200;
+      padding: 24px;
+      overflow-y: auto;
+    }
+
+    .overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+
+    .article-modal {
+      background: var(--bg-card);
+      border-radius: 12px;
+      max-width: 720px;
+      width: 100%;
+      padding: 48px;
+      margin: auto;
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 20px; right: 20px;
+      background: none; border: none;
+      font-size: 1.5rem; cursor: pointer;
+      color: var(--text-muted);
+      line-height: 1;
+    }
+
+    .article-body {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text);
+    }
+
+    .article-body p { margin-bottom: 1.4em; }
+
+    .article-body blockquote {
+      border-left: 3px solid var(--accent);
+      padding-left: 20px;
+      margin: 1.5em 0;
+      font-style: italic;
+      color: var(--text-muted);
+    }
+
+    .article-header { margin-bottom: 32px; }
+    .article-header h1 {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: normal;
+      line-height: 1.2;
+      margin: 12px 0 10px;
+    }
+
+    .article-header .hero-excerpt {
+      font-size: 1rem;
+      margin-bottom: 16px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo">Unfiltered<span>.</span></div>
+    <nav id="nav">
+      <button class="active" onclick="filterPosts('all', this)">All</button>
+      <button onclick="filterPosts('life', this)">Life</button>
+      <button onclick="filterPosts('tech', this)">Technology</button>
+      <button onclick="filterPosts('travel', this)">Travel</button>
+      <button onclick="filterPosts('parenting', this)">Parenting</button>
+      <button onclick="filterPosts('culture', this)">Culture</button>
+      <button onclick="filterPosts('ideas', this)">Ideas</button>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO (featured post) -->
+<div class="hero" id="hero">
+  <div class="hero-label">Latest Op-Ed</div>
+  <h1>The Quiet Tyranny of Optimization</h1>
+  <div class="hero-meta">
+    <span class="tag tech">Technology</span>
+    <span>May 10, 2026</span>
+    <span>6 min read</span>
+  </div>
+  <p class="hero-excerpt">
+    We've built apps to optimize our sleep, our food, our social lives, our grief.
+    At some point, the drive to be more efficient stopped being a tool and became a worldview —
+    and I think that worldview is quietly making us miserable.
+  </p>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="layout">
+  <main>
+    <div class="posts" id="posts-container"></div>
+  </main>
+
+  <aside class="sidebar">
+    <!-- About -->
+    <div class="sidebar-card">
+      <h3>About</h3>
+      <div class="about-avatar">✍️</div>
+      <div class="about-name">Ale Zuzenberg</div>
+      <p class="about-bio">
+        Founder, builder, traveler, dad. I write op-eds on the things I can't stop thinking about —
+        technology, parenthood, places, and the strange business of being alive.
+      </p>
+    </div>
+
+    <!-- Topics -->
+    <div class="sidebar-card">
+      <h3>Topics</h3>
+      <div class="topics-list">
+        <span class="topic-chip" onclick="filterPosts('life', null)">🌱 Life</span>
+        <span class="topic-chip" onclick="filterPosts('tech', null)">💻 Technology</span>
+        <span class="topic-chip" onclick="filterPosts('travel', null)">✈️ Travel</span>
+        <span class="topic-chip" onclick="filterPosts('parenting', null)">👶 Parenting</span>
+        <span class="topic-chip" onclick="filterPosts('culture', null)">🎭 Culture</span>
+        <span class="topic-chip" onclick="filterPosts('ideas', null)">💡 Ideas</span>
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="sidebar-card">
+      <h3>Stay in the Loop</h3>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:14px;">
+        New op-eds when they're ready. No spam, ever.
+      </p>
+      <input class="newsletter-input" type="email" placeholder="your@email.com" />
+      <button class="btn">Subscribe</button>
+    </div>
+
+    <!-- Must-reads -->
+    <div class="sidebar-card">
+      <h3>Must Reads</h3>
+      <div class="featured-list" id="featured-list"></div>
+    </div>
+  </aside>
+</div>
+
+<!-- ARTICLE MODAL -->
+<div class="overlay" id="overlay" onclick="closeModal(event)">
+  <div class="article-modal" id="modal-content">
+    <button class="modal-close" onclick="closeOverlay()">✕</button>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<footer>
+  © 2026 Unfiltered by Ale Zuzenberg · Written with conviction, published with care.
+</footer>
+
+<script>
+  const posts = [
+    {
+      id: 1,
+      tag: "tech",
+      tagLabel: "Technology",
+      date: "May 10, 2026",
+      read: "6 min",
+      title: "The Quiet Tyranny of Optimization",
+      excerpt: "We've built apps to optimize our sleep, our food, our social lives, our grief. At some point, the drive to be more efficient stopped being a tool and became a worldview — and I think that worldview is quietly making us miserable.",
+      emoji: "⚡",
+      featured: true,
+      body: `
+        <p>There's an app on my phone that tells me whether my sleep was "optimal." Another one scores my meals. A third gives me a "readiness score" each morning, a single number that purports to tell me how alive I am today.</p>
+        <p>I am, by most measures, a technologist. I built products. I believe in software. And I have slowly come to believe that this particular branch of software — the self-optimization industrial complex — is doing something corrosive to how we experience being human.</p>
+        <blockquote>"What gets measured gets managed." But not everything that matters can be measured, and not everything that can be measured matters.</blockquote>
+        <p>The problem isn't the data. Data is neutral. The problem is the frame: that there is always a better version of yourself one more habit away, that rest is only valuable when it's efficient rest, that a Saturday afternoon of aimless reading is a missed productivity opportunity.</p>
+        <p>When my daughter asks me to play, I used to glance at my watch to see if I could "fit it in." It took me longer than I'd like to admit to realize that this framing — fitting my child into my optimization schedule — was not a feature of a well-run life. It was a kind of madness.</p>
+        <p>I'm not advocating for chaos or deliberate inefficiency. I'm asking a simpler question: what are we optimizing <em>for</em>? Because the apps never answer that. They just hand you a score and imply that higher is better, indefinitely, forever. That life is a performance to be improved rather than an experience to be had.</p>
+        <p>The most interesting people I know are not optimized. They're curious, sometimes chaotic, often late, deeply absorbed in things that have no ROI. They remind me that the point of a good life is not to run it at maximum efficiency — it's to actually live it.</p>
+      `
+    },
+    {
+      id: 2,
+      tag: "parenting",
+      tagLabel: "Parenting",
+      date: "Apr 28, 2026",
+      read: "5 min",
+      title: "I'm Raising Kids in the Age of AI and I Have No Idea What I'm Doing",
+      excerpt: "Every generation of parents has faced new technology and worried about it. But this time feels different — not because AI is scary, but because I genuinely can't picture the world my kids will inhabit.",
+      emoji: "👶",
+      featured: true,
+      body: `
+        <p>My parents worried about television. Then came video games. Then the internet. Then smartphones. Each generation of parents was handed a new technology and told to figure out the rules.</p>
+        <p>I'm in that position now, but the thing I'm navigating isn't just a new device. It's a new cognitive infrastructure. AI tools can write, reason, generate, debate, tutor, and create. My kids will grow up treating them the way I treat Google — as a baseline, invisible utility.</p>
+        <blockquote>The question isn't whether to let them use AI. The question is what kind of relationship with intelligence I want them to develop.</blockquote>
+        <p>When I was in school, the premium skill was knowing things. Then it shifted to finding things. Now it seems to be shifting again — to evaluating things, questioning things, adding human judgment to machine output.</p>
+        <p>I don't know how to teach that deliberately. I don't think anyone does yet. What I try to do is model it: think out loud, change my mind visibly, say "I don't know" and then go find out together. Make the process of reasoning something they can see, not just the conclusions.</p>
+        <p>I also try to protect space for boredom. For doing hard things the slow way. For reading physical books and getting lost and figuring it out without help. Not as an ideology, but as a counterweight — because I suspect the muscle that will matter most in an AI-saturated world is the one that knows when to put AI down.</p>
+        <p>I have no idea if I'm getting any of this right. That uncertainty used to bother me. Increasingly, I think it's the honest position.</p>
+      `
+    },
+    {
+      id: 3,
+      tag: "travel",
+      tagLabel: "Travel",
+      date: "Apr 15, 2026",
+      read: "7 min",
+      title: "Why I Keep Going Back to Places That Have Nothing to Do",
+      excerpt: "The best trips I've ever taken have been somewhere with no obvious attractions. No iconic skyline, no UNESCO site, no restaurant worth flying for. Just a place that moves at its own pace and makes you move at yours.",
+      emoji: "✈️",
+      body: `
+        <p>I've been to cities that are on every list. The lists are not wrong — those cities are extraordinary. But the trips I remember most vividly are the ones no one told me to take.</p>
+        <p>A small town in the Basque country where I spent three days eating the same pintxo bar lunch because why would you eat anywhere else. A coastal village in Mexico where the Wi-Fi was just bad enough that I stopped trying. A mid-sized city in Portugal that guidebooks described as "a good base for day trips" — as if the whole point were to leave.</p>
+        <blockquote>Travel is sold as expansion. Sometimes the most expansive thing you can do is stop somewhere small and just be in it.</blockquote>
+        <p>What happens in places like that, I've found, is that you start to notice things. The rhythm of when people go to the market. The specific light at 6pm. The way everyone seems to know everyone and how that creates a texture of daily life you can observe from the outside like watching a beautiful machine do its work.</p>
+        <p>Destination travel, the Instagram-driven kind, has a way of turning places into props. You're there to get the shot, feel the feeling, complete the checklist. There's nothing wrong with that. But it's a very different thing from arriving somewhere with no agenda and letting the place teach you what it wants you to know.</p>
+        <p>My rule now: every trip needs at least one place I chose for no good reason. A town between two other towns. A detour with no confirmed payoff. The best thing I've ever seen was at the end of one of those detours. So was the best meal, the best conversation, and the funniest story I've told at a dinner party since.</p>
+      `
+    },
+    {
+      id: 4,
+      tag: "life",
+      tagLabel: "Life",
+      date: "Mar 31, 2026",
+      read: "4 min",
+      title: "On Finishing Things",
+      excerpt: "Starting is celebrated. Finishing is quietly underrated. I've been thinking about why we glorify beginnings and what we lose when we treat completion as an afterthought.",
+      emoji: "🌱",
+      body: `
+        <p>Our culture has a starting problem. Or rather, it has a worship-of-starting problem. The launch. The announcement. The day-one energy. These are treated as the peak of any endeavor, the moment worth documenting and celebrating.</p>
+        <p>Finishing is different. Finishing is anticlimactic by design — the thing exists now, and whatever gap there was between vision and reality has been paid in full. You know exactly what it is and, more uncomfortably, what it isn't.</p>
+        <blockquote>Starting is hope. Finishing is reckoning. Both are necessary. We've only learned to romanticize one of them.</blockquote>
+        <p>I have a long personal history with great beginnings. Projects launched with momentum that quietly became tabs never re-opened. Ideas gestured at in notebooks never returned to. There's a particular genre of shame that comes with encountering your own abandoned starting.</p>
+        <p>What I've learned — slowly, through repetition — is that finishing requires a different kind of commitment than starting. Starting runs on excitement. Finishing runs on something more like stubbornness. A decision that the thing will exist, even when it's hard, even when it's imperfect, even when you've lost the feeling that made you start.</p>
+        <p>The finished thing is never as good as the imagined thing. That's true always. It's also the only version of the thing that exists in the world, that someone else can encounter, that you can learn from. The imagined version teaches you nothing. Only the finished one does.</p>
+        <p>I'm trying to be a better finisher. It means tolerating the gap between what I meant and what I made. It means shipping things that aren't quite right. It means learning to find the quiet satisfaction in done — which is less glamorous than the celebration of begun, but far more honest.</p>
+      `
+    },
+    {
+      id: 5,
+      tag: "ideas",
+      tagLabel: "Ideas",
+      date: "Mar 12, 2026",
+      read: "8 min",
+      title: "Contrarianism Is Not the Same as Thinking",
+      excerpt: "There's a certain kind of intellectual pose that mistakes disagreement for insight. Taking the opposite position is easy. Having a well-reasoned view that happens to be unpopular is something else entirely.",
+      emoji: "💡",
+      body: `
+        <p>The internet has made contrarianism extremely legible. Take a popular belief, argue the opposite, publish. The structure is simple, the rewards are real — attention, retweets, a reputation as someone who "asks the hard questions."</p>
+        <p>I want to be careful here because I'm not defending consensus. Consensus is often wrong. The most important ideas in any field started as minority views held by people willing to be unpopular. I'm a fan of heterodoxy done well.</p>
+        <blockquote>The question is whether you're disagreeing because you have a better model of reality, or because you've learned that disagreement is rewarded.</blockquote>
+        <p>The tell is in the reasoning. Real heterodox thinking engages seriously with the evidence for the mainstream view. It acknowledges the strongest version of the opposing argument. It's willing to be specific and therefore falsifiable.</p>
+        <p>Performative contrarianism does the opposite. It hand-waves at complexity. It treats the mainstream as obviously corrupt or naive without engaging with why smart people believe it. It changes position when the mainstream changes, because the goal was never the truth — it was the pose.</p>
+        <p>I've caught myself doing this. It's seductive because it feels like courage. And sometimes it is courage — sometimes the crowd really is wrong and saying so matters. But it's worth asking: am I disagreeing because I've actually thought this through, or because disagreement feels good and gets attention?</p>
+        <p>The version of intellectual honesty I'm trying to practice is harder: agree when the evidence supports it even when agreement is boring, disagree when my actual reasoning demands it even when it's unpopular, and do the work to know the difference. That work is what thinking actually is.</p>
+      `
+    },
+    {
+      id: 6,
+      tag: "culture",
+      tagLabel: "Culture",
+      date: "Feb 22, 2026",
+      read: "5 min",
+      title: "The Last Generation That Will Know What Boredom Feels Like",
+      excerpt: "Boredom has been nearly eradicated from daily life. I think we should mourn it. The restless, unoccupied mind turns out to be where a lot of good things come from.",
+      emoji: "🎭",
+      body: `
+        <p>I grew up bored. Not in a deprived way — in the ordinary, pre-smartphone way where you'd sometimes be in a waiting room with nothing to do and just have to sit there with your thoughts. In the car on long drives, staring at passing fields. At family events where the conversation was for adults and you just had to be present and wait.</p>
+        <p>That experience is now essentially extinct. The phone has colonized every available moment. Waiting rooms have screens. Long drives have podcasts. The space where boredom used to live has been paved over.</p>
+        <blockquote>Boredom is not the absence of stimulation. It's the presence of yourself — unmediated, with nowhere to go.</blockquote>
+        <p>I don't want to romanticize discomfort. But there's a body of research suggesting that the bored mind is a generative one — that daydreaming, wandering attention, and unstructured mental time are associated with creativity and problem-solving in ways that constant stimulation is not.</p>
+        <p>More importantly: boredom forces a reckoning. When there's nothing to consume, you notice what you actually want. You notice what you're avoiding. You surface ideas that don't have a chance when every gap is plugged with content.</p>
+        <p>I've started building deliberate boredom back into my life. Walks without headphones. Meals without phones. The first ten minutes after waking without reaching for anything. It feels uncomfortable at first, and then something loosens, and sometimes something interesting arrives.</p>
+        <p>I'm not sure the generation growing up now will know what that loosening feels like. I hope I'm wrong. I think the unoccupied mind is worth protecting.</p>
+      `
+    },
+    {
+      id: 7,
+      tag: "tech",
+      tagLabel: "Technology",
+      date: "May 10, 2026",
+      read: "6 min",
+      title: "My First Post",
+      excerpt: "This is my first post.",
+      emoji: "⚡",
+      featured: true,
+      body: `
+        <p>There's an app on my phone that tells me whether my sleep was "optimal." Another one scores my meals. A third gives me a "readiness score" each morning, a single number that purports to tell me how alive I am today.</p>
+        <p>I am, by most measures, a technologist. I built products. I believe in software. And I have slowly come to believe that this particular branch of software — the self-optimization industrial complex — is doing something corrosive to how we experience being human.</p>
+        <blockquote>"What gets measured gets managed." But not everything that matters can be measured, and not everything that can be measured matters.</blockquote>
+        <p>The problem isn't the data. Data is neutral. The problem is the frame: that there is always a better version of yourself one more habit away, that rest is only valuable when it's efficient rest, that a Saturday afternoon of aimless reading is a missed productivity opportunity.</p>
+        <p>When my daughter asks me to play, I used to glance at my watch to see if I could "fit it in." It took me longer than I'd like to admit to realize that this framing — fitting my child into my optimization schedule — was not a feature of a well-run life. It was a kind of madness.</p>
+        <p>I'm not advocating for chaos or deliberate inefficiency. I'm asking a simpler question: what are we optimizing <em>for</em>? Because the apps never answer that. They just hand you a score and imply that higher is better, indefinitely, forever. That life is a performance to be improved rather than an experience to be had.</p>
+        <p>The most interesting people I know are not optimized. They're curious, sometimes chaotic, often late, deeply absorbed in things that have no ROI. They remind me that the point of a good life is not to run it at maximum efficiency — it's to actually live it.</p>
+      `
+    }
+  ];
+
+  function renderPosts(filter = 'all') {
+    const container = document.getElementById('posts-container');
+    const filtered = filter === 'all' ? posts : posts.filter(p => p.tag === filter);
+    container.innerHTML = filtered.map(p => `
+      <article class="post" onclick="openPost(${p.id})" data-tag="${p.tag}">
+        <div>
+          <div class="post-meta">
+            <span class="tag ${p.tag}">${p.tagLabel}</span>
+            <span style="font-size:0.8rem;color:var(--text-muted)">${p.date}</span>
+          </div>
+          <h2 class="post-title">${p.title}</h2>
+          <p class="post-excerpt">${p.excerpt}</p>
+          <div class="post-footer">
+            <span>${p.read} read</span>
+            <span class="read-more">Read →</span>
+          </div>
+        </div>
+        <div class="post-thumb">${p.emoji}</div>
+      </article>
+    `).join('');
+  }
+
+  function renderFeatured() {
+    const featured = posts.filter(p => p.featured).slice(0, 3);
+    const all = posts.slice(0, 3);
+    const items = featured.length ? featured : all;
+    document.getElementById('featured-list').innerHTML = items.map((p, i) => `
+      <div class="featured-item" onclick="openPost(${p.id})">
+        <div class="featured-num">0${i + 1}</div>
+        <div>
+          <div class="featured-title">${p.title}</div>
+          <div class="featured-meta">${p.tagLabel} · ${p.date}</div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function filterPosts(tag, btn) {
+    renderPosts(tag);
+    if (btn) {
+      document.querySelectorAll('#nav button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+  }
+
+  function openPost(id) {
+    const p = posts.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('modal-body').innerHTML = `
+      <div class="article-header">
+        <span class="tag ${p.tag}">${p.tagLabel}</span>
+        <h1>${p.title}</h1>
+        <p class="hero-excerpt">${p.excerpt}</p>
+        <div class="hero-meta">
+          <span>${p.date}</span>
+          <span>${p.read} read</span>
+        </div>
+      </div>
+      <div class="article-body">${p.body}</div>
+    `;
+    document.getElementById('overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeOverlay() {
+    document.getElementById('overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function closeModal(e) {
+    if (e.target === document.getElementById('overlay')) closeOverlay();
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeOverlay(); });
+
+  renderPosts();
+  renderFeatured();
+</script>
+</body>
+</html>
